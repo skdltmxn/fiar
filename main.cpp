@@ -3,22 +3,22 @@
 
 int main()
 {
-	fiar game;
+    fiar game;
 
-	// start game and put my stone if my turn
-	game.start();
+    // start game and put my stone if my turn
+    game.start();
 
-	while (game.is_playing())
-	{
-		// get opponent's col #
-		int col = game.get_opponent_col();
+    while (game.is_playing())
+    {
+        // get opponent's col #
+        int col = game.get_opponent_col();
 
-		// put stone on gameboard
-		game.put_stone(col);
+        // put stone on gameboard
+        game.put_stone(col);
 
-		// think next stone (heuristic / input)
-		game.think();
-	}
+        // think next stone (heuristic / input)
+        game.think();
+    }
 
-	return 0;
+    return 0;
 }
