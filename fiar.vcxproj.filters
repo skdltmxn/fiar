@@ -18,5 +18,19 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fiar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gameboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fiar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
