@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -Wall -O3 -std=c++14
 OUTPUT = fiar
 OBJS = fiar.o main.o
-HDRS = fiar.h gameboard.h stone.h
+HDRS = fiar.h gameboard.h
 
 all: prepare build
 

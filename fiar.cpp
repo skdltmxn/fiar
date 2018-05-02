@@ -84,6 +84,8 @@ void fiar::think()
     put_stone(col);
 }
 
+// think using heuristic
+// we use negamax, a variant of minmax algorithm and alpha-beta pruning
 int fiar::_think_heuristic() const
 {
     return 4;

@@ -1,8 +1,10 @@
 #pragma once
 
-#include "stone.h"
 #include <iostream>
 #include <memory>
+
+#define ROW 6
+#define COL 7
 
 class gameboard
 {
@@ -11,14 +13,21 @@ public:
     {
         for (auto& row : _stones)
             for (auto& col : row)
-                col.reset(nullptr);
+                col = 0;
+
+        _moves = 0;
+    }
+
+    bool is_full() const
+    {
+        return _moves >= ROW * COL
     }
 
     bool is_available(int col) const
     {
         for (auto& row : _stones)
         {
-            if (row[col - 1] == nullptr)
+            if (row[col - 1] == 0)
                 return true;
         }
 
@@ -29,9 +38,10 @@ public:
     {
         for (auto& row : _stones)
         {
-            if (row[col - 1] == nullptr)
+            if (row[col - 1] == 0)
             {
-                row[col - 1] = std::make_unique<stone>(mine);
+                row[col - 1] = mine ? 1 : -1;
+                ++_moves;
                 return;
             }
         }
@@ -43,7 +53,7 @@ public:
         for (int row = 5; row > -1; --row)
         {
             for (auto& col : _stones[row])
-                std::cout << " " << (col ? col->symbol() : '.') << " ";
+                std::cout << " " << (col ? (col == 1 ? 'O' : 'X') : '.') << " ";
 
             std::cout << std::endl;
         }
@@ -52,5 +62,6 @@ public:
 private:
     // 6 rows, 7 cols
     // row 0 is the bottom-most row (stone gets piled up from row 0)
-    std::unique_ptr<stone> _stones[6][7];
+    char _stones[ROW][COL];
+    int _moves;
 };
