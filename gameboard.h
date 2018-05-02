@@ -20,7 +20,7 @@ public:
 
     bool is_full() const
     {
-        return _moves >= ROW * COL
+        return _moves >= ROW * COL;
     }
 
     bool is_available(int col) const
