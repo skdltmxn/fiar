@@ -20,5 +20,10 @@ int main()
         game.think();
     }
 
+    if (game.did_win())
+        std::cout << "You won!" << std::endl;
+    else
+        std::cout << "You lost!" << std::endl;
+
     return 0;
 }

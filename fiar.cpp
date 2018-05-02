@@ -6,6 +6,7 @@ void fiar::start()
 {
     // initialize gameboard
     _gameboard.init();
+    _playing = true;
 
     char c;
     std::cout << "My turn first? (y/n) > ";
@@ -22,7 +23,7 @@ void fiar::start()
 
 bool fiar::is_playing() const
 {
-    return true;
+    return _playing;
 }
 
 int fiar::get_opponent_col() const
@@ -54,14 +55,21 @@ void fiar::put_stone(int col)
         return;
     }
 
-    _gameboard.add_stone(_myturn, col);
+    int row = _gameboard.add_stone(_myturn, col);
     _gameboard.draw_board();
+    if (_gameboard.has_winning_lines(row, col))
+    {
+        _playing = false;
+        return;
+    }
 
     _myturn = !_myturn;
 }
 
 void fiar::think()
 {
+    if (!is_playing()) return;
+
     std::cout << "Choose algorithm (1. heuristic / 2. rule) => ";
     int c;
     std::cin >> c;
