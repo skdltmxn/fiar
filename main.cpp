@@ -5,7 +5,12 @@
 int main()
 {
 	int counter = 0;
+	int order = 1;
 	bool winner = false;
+	bool first = false;
+	
+	cout << "WHO FIRST? 1.RULE 2.USER : ";
+	cin >> order;
 
 	srand(GetTickCount());   //sets randomizer as time *unique*
 	cout << "Please select a number from 1-7" << endl;
@@ -15,6 +20,8 @@ int main()
 
 	for (int i = 0; i < 21; i++)
 	{
+		if (order == 1 && i == 0) first = true;
+		else first = false;
 		player_movement(1);
 		draw_board();
 		winner = check_for_winner(LastMoveX, LastMoveY, 1);
