@@ -20,9 +20,9 @@ int main()
 		winner = check_for_winner(LastMoveX, LastMoveY, 1);
 		evalutescore(1);
 		evalutescore(2);
-		for (int i = 0; i < 7; i++) {
-			if (checknum[i] >= 6) {
-				score[0][i] = score[1][i] = 0;
+		for (int j = 0; j < 7; j++) {
+			if (checknum[j] >= 6) {
+				score[0][j] = score[1][j] = 0;
 			}
 		}
 		cout << " " << abs(score[0][0] - score[1][0]) << "  " << abs(score[0][1] - score[1][1]) << "  "
@@ -38,9 +38,9 @@ int main()
 		player_movement(2);
 		draw_board();
 		winner = check_for_winner(LastMoveX, LastMoveY, 2);
-		for (int i = 0; i < 7; i++) {
-			if (checknum[i] >= 6) {
-				score[0][i] = score[1][i] = 0;
+		for (int j = 0; j < 7; j++) {
+			if (checknum[j] >= 6) {
+				score[0][j] = score[1][j] = 0;
 			}
 		}
 		evalutescore(1);
