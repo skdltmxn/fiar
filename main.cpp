@@ -20,10 +20,18 @@ int main()
         game.think();
     }
 
-    if (game.did_win())
-        std::cout << "You won!" << std::endl;
-    else
-        std::cout << "You lost!" << std::endl;
+	switch (game.result())
+	{
+	case fiar::GAME_RESULT::WIN:
+		std::cout << "You won!" << std::endl;
+		break;
+	case fiar::GAME_RESULT::LOSE:
+		std::cout << "You lost!" << std::endl;
+		break;
+	case fiar::GAME_RESULT::DRAW:
+		std::cout << "Draw game!" << std::endl;
+		break;
+	}
 
     return 0;
 }
