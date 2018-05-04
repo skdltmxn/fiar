@@ -46,7 +46,7 @@ public:
 		return false;
 	}
 
-	bool has_winning_lines(int row, int col) const
+	bool has_winning_lines() const
 	{
 		int score = calc_score();
 		return (score == std::numeric_limits<int>::max() || score == std::numeric_limits<int>::min());

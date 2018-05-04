@@ -25,8 +25,12 @@ private:
 	int minimize(int depth, int alpha, int beta, int &choice);
     int think_rule();
 
+	// rule functions
+
+
     gameboard _gameboard;
     bool _myturn;
     bool _playing;
+	int _turn;
 	GAME_RESULT _result;
 };

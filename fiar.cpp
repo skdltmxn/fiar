@@ -10,6 +10,7 @@ void fiar::start()
     // initialize gameboard
     _gameboard.init();
     _playing = true;
+	_turn = 0;
 	_result = GAME_RESULT::DRAW;
 
     char c;
@@ -21,8 +22,11 @@ void fiar::start()
     else
         _myturn = false;
 
-    if (_myturn)
-        think(); // think next stone
+	if (_myturn)
+	{
+		think(); // think next stone
+		_turn++;
+	}
 }
 
 int fiar::get_opponent_col() const
@@ -59,7 +63,7 @@ void fiar::put_stone(int col)
 		std::cout << "Putting stone at (" << row << ", " << col << ")" << std::endl;
 
     _gameboard.draw_board();
-    if (_gameboard.has_winning_lines(row, col))
+    if (_gameboard.has_winning_lines())
     {
 		_result = _myturn ? GAME_RESULT::WIN : GAME_RESULT::LOSE;
         _playing = false;
@@ -102,10 +106,15 @@ void fiar::think()
 // we use minmax algorithm and alpha-beta pruning
 int fiar::think_heuristic()
 {
+	// first stone must not be placed in the center
+	if (_turn == 0)
+		return 3;
+
 	int alpha = std::numeric_limits<int>::min();
 	int beta = std::numeric_limits<int>::max();
 	int col = 1;
-	std::cout << "Score: " << maximize(10, alpha, beta, col) << std::endl;
+	maximize(10, alpha, beta, col);
+	//std::cout << "Score: " << maximize(10, alpha, beta, col) << std::endl;
 
 	for (; col < COL && !_gameboard.is_available(col); ++col);
 
@@ -187,5 +196,11 @@ int fiar::minimize(int depth, int alpha, int beta, int &choice)
 
 int fiar::think_rule()
 {
+	if (!_turn)
+	{
+		std::cout << "Rule: (1, 3) on first move" << std::endl;
+		return 3;
+	}
+
     return 4;
 }
