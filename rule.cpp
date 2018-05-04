@@ -1,4 +1,4 @@
-#include "main.h";
+#include "rule.h";
 #include <math.h>
 #include <iostream>
 
