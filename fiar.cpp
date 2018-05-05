@@ -25,7 +25,7 @@ void fiar::start()
 	if (_myturn)
 	{
 		think(); // think next stone
-		_turn++;
+		//_turn++;
 	}
 }
 
@@ -61,7 +61,7 @@ void fiar::put_stone(int col)
     int row = _gameboard.add_stone(_myturn, col);
 	if (_myturn)
 		std::cout << "Putting stone at (" << row << ", " << col << ")" << std::endl;
-
+    _turn++;
     _gameboard.draw_board();
     if (_gameboard.has_winning_lines())
     {
