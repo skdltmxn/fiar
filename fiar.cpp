@@ -1,7 +1,9 @@
 #include "fiar.h"
+#include "webrequest.h"
 #include <algorithm>
-#include <iostream>
-#include <limits>
+#include <array>
+#include <functional>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -12,6 +14,7 @@ void fiar::start()
     _playing = true;
 	_turn = 0;
 	_result = GAME_RESULT::DRAW;
+	_seq = "";
 
     char c;
     std::cout << "My turn first? (y/n) > ";
@@ -23,10 +26,7 @@ void fiar::start()
         _myturn = false;
 
 	if (_myturn)
-	{
 		think(); // think next stone
-		//_turn++;
-	}
 }
 
 int fiar::get_opponent_col() const
@@ -61,7 +61,9 @@ void fiar::put_stone(int col)
     int row = _gameboard.add_stone(_myturn, col);
 	if (_myturn)
 		std::cout << "Putting stone at (" << row << ", " << col << ")" << std::endl;
+
     _turn++;
+	_seq += std::to_string(col);
     _gameboard.draw_board();
     if (_gameboard.has_winning_lines())
     {
@@ -69,6 +71,13 @@ void fiar::put_stone(int col)
         _playing = false;
         return;
     }
+
+	if (_gameboard.is_full())
+	{
+		_result = GAME_RESULT::DRAW;
+		_playing = false;
+		return;
+	}
 
     _myturn = !_myturn;
 }
@@ -114,16 +123,8 @@ int fiar::think_heuristic()
 	int beta = std::numeric_limits<int>::max();
 	int col = 1;
 	maximize(10, alpha, beta, col);
-	//std::cout << "Score: " << maximize(10, alpha, beta, col) << std::endl;
 
 	for (; col < COL && !_gameboard.is_available(col); ++col);
-
-	// no more available spots, game draw!
-	if (!_gameboard.is_available(col))
-	{
-		_playing = false;
-		return -1;
-	}
 
 	return col;
 }
@@ -196,11 +197,66 @@ int fiar::minimize(int depth, int alpha, int beta, int &choice)
 
 int fiar::think_rule()
 {
+	// Rule1: first move is deterministic
 	if (!_turn)
 	{
 		std::cout << "Rule: (1, 3) on first move" << std::endl;
 		return 3;
 	}
 
-    return 4;
+	auto web = web_request("connect4.gamesolver.org", 80);
+	auto res = web.get("/solve", "pos", _seq);
+
+	// {"pos":"XXX","score":[2,2,1,-1,4,1,3]}
+	auto pos = res.find("score\":[") + 8;
+	auto array = res.substr(pos, res.find("]}") - pos);
+	std::istringstream is(array);
+	std::string score_str;
+	std::array<std::pair<int, int>, COL> scores; // pair<score, col>
+	int i = 0;
+
+	while (std::getline(is, score_str, ','))
+	{
+		int score = std::strtol(score_str.c_str(), nullptr, 10);
+		if (score == 100)
+			score = std::numeric_limits<int>::min();
+
+		scores[i++] = std::make_pair(score, i);
+	}
+
+	std::sort(scores.begin(), scores.end(), std::greater<decltype(scores[0])>());
+
+	// cols with highes score
+	std::vector<int> possible;
+
+	for (auto score : scores)
+	{
+		if (score.first == scores[0].first)
+			possible.push_back(score.second);
+	}
+
+	// Rule2: there is only one best move
+	if (possible.size() == 1)
+	{
+		std::cout << "Rule: Single best move found with score " << scores[0].first << std::endl;
+		return possible[0];
+	}
+
+	// Rule3: multiple best moves
+	int max_score = std::numeric_limits<int>::min();
+	int max_col = 1;
+	for (auto col : possible)
+	{
+		_gameboard.add_stone(true, col);
+		int score = _gameboard.calc_score();
+		if (score > max_score)
+		{
+			max_score = score;
+			max_col = col;
+		}
+		_gameboard.remove_stone(col);
+	}
+	std::cout << "Rule: Best board score when multiple possible moves found, score: " << max_score << std::endl;
+
+    return max_col;
 }

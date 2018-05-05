@@ -1,8 +1,13 @@
 #include "fiar.h"
-#include <iostream>
+#include <WinSock2.h>
+
+#pragma comment(lib, "ws2_32.lib")
 
 int main()
 {
+	WSADATA wsa;
+	WSAStartup(MAKEWORD(2, 2), &wsa);
+
     fiar game;
 
     // start game and put my stone if my turn
@@ -32,6 +37,8 @@ int main()
 		std::cout << "Draw game!" << std::endl;
 		break;
 	}
+
+	WSACleanup();
 
     return 0;
 }

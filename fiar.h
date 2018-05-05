@@ -33,4 +33,5 @@ private:
     bool _playing;
 	int _turn;
 	GAME_RESULT _result;
+	std::string _seq;
 };

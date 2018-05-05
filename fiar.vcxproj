@@ -125,10 +125,12 @@
   <ItemGroup>
     <ClCompile Include="fiar.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="webrequest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fiar.h" />
     <ClInclude Include="gameboard.h" />
+    <ClInclude Include="webrequest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
